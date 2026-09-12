@@ -1,0 +1,28 @@
+# Copy to config.yaml (or set WCM_CONFIG=/path/to/config.yaml) and adjust.
+# Any key here can also be overridden with an environment variable named
+# WCM_<KEY_UPPERCASE>, e.g. WCM_DATA_DIR=/data
+
+data_dir: data
+
+key_size: 2048
+digest: sha256
+
+# Leaf validity must stay comfortably shorter than ca_valid_days: a cert
+# can never outlive the CA that signed it (issuance/renewal is rejected
+# if it would).
+ca_valid_days: 3650
+intermediate_valid_days: 1825
+server_valid_days: 825
+client_valid_days: 825
+
+# Default subject fields used when a request does not override them.
+country: US
+state_name: ""
+locality: ""
+org: "Example Wifi"
+org_unit: "IT"
+email: ""
+
+# Expiry thresholds (in days remaining) used for dashboard/CLI status colouring.
+expiry_warning_days: 90
+expiry_critical_days: 30

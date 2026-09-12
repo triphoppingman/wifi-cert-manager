@@ -1,0 +1,38 @@
+# Local runtime state - CA/server/client keys, certs and the state index.
+data/
+
+# Old openssl-based cert notes, not part of the tool itself.
+docs/
+
+# Local config overrides (keep config.example.yaml tracked instead).
+config.yaml
+.env
+
+# Key/cert/bundle material that could end up anywhere via CLI --out flags.
+*.pem
+*.key
+*.crt
+*.der
+*.p12
+*.pfx
+*.csr
+*.crl
+*.zip
+*.lock
+dh
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+
+# Docker Compose local overrides
+docker-compose.override.yml
+
+# Editor/OS cruft
+.DS_Store
+*.swp

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wifi-cert-manager"
+version = "0.1.0"
+description = "CA / server / client certificate lifecycle management for WiFi TLS (EAP-TLS/FreeRADIUS) authentication"
+requires-python = ">=3.10"
+dependencies = [
+    "click>=8.5,<9",
+    "cryptography>=50.0,<51",
+    "Flask>=3.1,<4",
+    "PyYAML>=6.0,<7",
+    "Markdown>=3.7,<4",
+]
+
+[project.scripts]
+certmgr = "wifi_cert_manager.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["wifi_cert_manager*"]
+
+[tool.setuptools.package-data]
+"wifi_cert_manager.webapp" = ["templates/*.html", "static/*.css", "static/*.js"]

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WiFi Cert Manager</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>WiFi Cert Manager</h1>
+    <nav id="tabs">
+      <button data-tab="dashboard" class="active">Dashboard</button>
+      <button data-tab="cas">Certificate Authorities</button>
+      <button data-tab="servers">Server Certs</button>
+      <button data-tab="clients">Client Certs</button>
+      <button data-tab="readme">Readme</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="tab-dashboard" class="tab active">
+      <h2>Expiry Overview</h2>
+      <div id="dashboard-summary"></div>
+      <h3>Certificate Authorities</h3>
+      <table id="dashboard-cas"><thead>
+        <tr><th>Name</th><th>Type</th><th>Not After</th><th>Days Left</th><th>Status</th></tr>
+      </thead><tbody></tbody></table>
+      <h3>Server / Client Certificates</h3>
+      <table id="dashboard-certs"><thead>
+        <tr><th>Name</th><th>Kind</th><th>Issuer</th><th>Not After</th><th>Days Left</th><th>Status</th></tr>
+      </thead><tbody></tbody></table>
+    </section>
+
+    <section id="tab-cas" class="tab">
+      <h2>Certificate Authorities</h2>
+      <div class="forms">
+        <form id="form-ca-create">
+          <h3>Create CA / Intermediate</h3>
+          <label>Name <input name="name" required pattern="[A-Za-z0-9._-]+"></label>
+          <label>Common Name <input name="common_name" required></label>
+          <label>Intermediate of (optional) <input name="intermediate_of" placeholder="parent CA name"></label>
+          <label>Validity (days, optional) <input name="days" type="number"></label>
+          <button type="submit">Create</button>
+        </form>
+        <form id="form-ca-import" enctype="multipart/form-data">
+          <h3>Import CA / Intermediate</h3>
+          <label>Name <input name="name" required pattern="[A-Za-z0-9._-]+"></label>
+          <label>Certificate (PEM) <input name="cert" type="file" required></label>
+          <label>Private Key (PEM, optional) <input name="key" type="file"></label>
+          <button type="submit">Import</button>
+        </form>
+      </div>
+      <table id="ca-table"><thead>
+        <tr><th>Name</th><th>Type</th><th>Parent</th><th>Not After</th><th>Status</th><th>Actions</th></tr>
+      </thead><tbody></tbody></table>
+    </section>
+
+    <section id="tab-servers" class="tab">
+      <h2>Server Certificates</h2>
+      <form id="form-server-create">
+        <label>Name <input name="name" required pattern="[A-Za-z0-9._-]+"></label>
+        <label>Issuing CA <select name="ca_name" required></select></label>
+        <label>Common Name <input name="common_name" required placeholder="radius.example.com"></label>
+        <label>SANs (comma separated) <input name="sans" placeholder="radius.example.com,10.0.0.5"></label>
+        <label>Validity (days, optional) <input name="days" type="number"></label>
+        <label>Private key password (optional) <input name="key_password" type="password" autocomplete="new-password"></label>
+        <label>Confirm key password <input name="key_password_confirm" type="password" autocomplete="new-password"></label>
+        <button type="submit">Issue Server Cert</button>
+      </form>
+      <table id="server-table"><thead>
+        <tr><th>Name</th><th>Issuer</th><th>Not After</th><th>Status</th><th>Actions</th></tr>
+      </thead><tbody></tbody></table>
+      <h3>Details</h3>
+      <div id="server-details" class="details-panel">Select a certificate above to see its details.</div>
+    </section>
+
+    <section id="tab-clients" class="tab">
+      <h2>Client Certificates</h2>
+      <form id="form-client-create">
+        <label>Name <input name="name" required pattern="[A-Za-z0-9._-]+"></label>
+        <label>Issuing CA <select name="ca_name" required></select></label>
+        <label>Common Name <input name="common_name" required placeholder="device or user identity"></label>
+        <label>Validity (days, optional) <input name="days" type="number"></label>
+        <label>Private key password (optional) <input name="key_password" type="password" autocomplete="new-password"></label>
+        <label>Confirm key password <input name="key_password_confirm" type="password" autocomplete="new-password"></label>
+        <button type="submit">Issue Client Cert</button>
+      </form>
+      <table id="client-table"><thead>
+        <tr><th>Name</th><th>Issuer</th><th>Not After</th><th>Status</th><th>Actions</th></tr>
+      </thead><tbody></tbody></table>
+      <h3>Details</h3>
+      <div id="client-details" class="details-panel">Select a certificate above to see its details.</div>
+    </section>
+
+    <section id="tab-readme" class="tab">
+      <div id="readme-content" class="markdown-body">Loading...</div>
+    </section>
+  </main>
+
+  <div id="toast"></div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
