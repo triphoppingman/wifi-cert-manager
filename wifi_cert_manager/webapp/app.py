@@ -14,6 +14,7 @@ from pathlib import Path
 
 import markdown
 from flask import Flask, jsonify, render_template, request, send_file
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from wifi_cert_manager.core import (
     CertManagerError,
@@ -47,6 +48,9 @@ def _confirmed_password(body: dict, field: str) -> str | None:
 
 def create_app(config=None) -> Flask:
     app = Flask(__name__)
+    # Trust X-Forwarded-* from the reverse proxy so url_for(_external=True)
+    # (used to build the OIDC redirect_uri) sees the real scheme/host.
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_port=1)
     cfg = config or load_config()
     store = CertStore(cfg)
     app.config["STORE"] = store
