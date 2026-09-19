@@ -26,3 +26,16 @@ email: ""
 # Expiry thresholds (in days remaining) used for dashboard/CLI status colouring.
 expiry_warning_days: 90
 expiry_critical_days: 30
+
+# Flask session secret; set to a random persistent value in production
+# (a random one is generated at startup otherwise, which invalidates
+# sessions on every restart / differs per gunicorn worker).
+secret_key: ""
+
+# Optional OIDC login gate (e.g. Authentik) for the web UI. See
+# docs/OIDC-authentication.md. Disabled by default.
+oidc_enabled: false
+oidc_issuer: ""
+oidc_client_id: ""
+oidc_client_secret: ""
+oidc_allowed_users: ""  # comma-separated emails; empty = allow anyone who logs in

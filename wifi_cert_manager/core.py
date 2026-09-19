@@ -55,6 +55,12 @@ DEFAULT_CONFIG: dict[str, Any] = {
     "email": "",
     "expiry_warning_days": 90,
     "expiry_critical_days": 30,
+    "secret_key": "",
+    "oidc_enabled": False,
+    "oidc_issuer": "",
+    "oidc_client_id": "",
+    "oidc_client_secret": "",
+    "oidc_allowed_users": "",
 }
 
 
@@ -87,6 +93,12 @@ class Config:
     email: str = ""
     expiry_warning_days: int = 90
     expiry_critical_days: int = 30
+    secret_key: str = ""
+    oidc_enabled: bool = False
+    oidc_issuer: str = ""
+    oidc_client_id: str = ""
+    oidc_client_secret: str = ""
+    oidc_allowed_users: str = ""  # comma-separated emails; empty = allow anyone who logs in
 
     @property
     def data_path(self) -> Path:
@@ -112,7 +124,12 @@ def load_config(path: Optional[str] = None) -> Config:
         env_key = f"WCM_{key.upper()}"
         if env_key in os.environ:
             raw = os.environ[env_key]
-            cfg[key] = int(raw) if isinstance(cfg[key], int) else raw
+            if isinstance(cfg[key], bool):
+                cfg[key] = raw.strip().lower() in ("1", "true", "yes", "on")
+            elif isinstance(cfg[key], int):
+                cfg[key] = int(raw)
+            else:
+                cfg[key] = raw
 
     return Config(**cfg)
 

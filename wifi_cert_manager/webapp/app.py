@@ -22,6 +22,7 @@ from wifi_cert_manager.core import (
     ValidationError,
     load_config,
 )
+from wifi_cert_manager.webapp.auth import bp as auth_bp, init_oauth, require_login
 
 
 def _find_readme() -> Path | None:
@@ -49,6 +50,10 @@ def create_app(config=None) -> Flask:
     cfg = config or load_config()
     store = CertStore(cfg)
     app.config["STORE"] = store
+    app.secret_key = cfg.secret_key or os.environ.get("SECRET_KEY") or os.urandom(32)
+    init_oauth(app)
+    app.register_blueprint(auth_bp)
+    app.before_request(require_login)
 
     @app.errorhandler(CertManagerError)
     def _handle_error(err: CertManagerError):
